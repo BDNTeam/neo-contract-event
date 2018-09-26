@@ -1,0 +1,137 @@
+{
+    "avm": {
+        "name": "test_contract",
+        "hash": "e601e8955cf7f7cb09c151257752013f"
+    },
+    "compiler": {
+        "name": "neo-boa",
+        "version": "0.5.0"
+    },
+    "files": [
+        {
+            "id": 1,
+            "url": "/Users/siyuanhsiao/workspace/neo/neo-contract-event/test_contract.py"
+        }
+    ],
+    "map": [
+        {
+            "start": 14,
+            "end": 22,
+            "file": 1,
+            "method": "Main",
+            "line": 2,
+            "file_line_no": 5
+        },
+        {
+            "start": 23,
+            "end": 30,
+            "file": 1,
+            "method": "Main",
+            "line": 4,
+            "file_line_no": 7
+        },
+        {
+            "start": 31,
+            "end": 57,
+            "file": 1,
+            "method": "Main",
+            "line": 5,
+            "file_line_no": 8
+        },
+        {
+            "start": 58,
+            "end": 62,
+            "file": 1,
+            "method": "Main",
+            "line": 6,
+            "file_line_no": 9
+        },
+        {
+            "start": 63,
+            "end": 74,
+            "file": 1,
+            "method": "Main",
+            "line": 8,
+            "file_line_no": 11
+        },
+        {
+            "start": 75,
+            "end": 82,
+            "file": 1,
+            "method": "Main",
+            "line": 10,
+            "file_line_no": 13
+        },
+        {
+            "start": 83,
+            "end": 114,
+            "file": 1,
+            "method": "Main",
+            "line": 11,
+            "file_line_no": 14
+        },
+        {
+            "start": 115,
+            "end": 119,
+            "file": 1,
+            "method": "Main",
+            "line": 12,
+            "file_line_no": 15
+        },
+        {
+            "start": 120,
+            "end": 129,
+            "file": 1,
+            "method": "Main",
+            "line": 14,
+            "file_line_no": 17
+        },
+        {
+            "start": 130,
+            "end": 139,
+            "file": 1,
+            "method": "Main",
+            "line": 15,
+            "file_line_no": 18
+        },
+        {
+            "start": 140,
+            "end": 149,
+            "file": 1,
+            "method": "Main",
+            "line": 16,
+            "file_line_no": 19
+        },
+        {
+            "start": 150,
+            "end": 167,
+            "file": 1,
+            "method": "Main",
+            "line": 17,
+            "file_line_no": 20
+        },
+        {
+            "start": 168,
+            "end": 189,
+            "file": 1,
+            "method": "Sell",
+            "line": 19,
+            "file_line_no": 43
+        },
+        {
+            "start": 190,
+            "end": 223,
+            "file": 1,
+            "method": "Sell",
+            "line": 3,
+            "file_line_no": 27
+        },
+        {
+            "start": 224,
+            "end": 229,
+            "file": 1,
+            "line": 5
+        }
+    ],
+    "breakpoints": []
+}
