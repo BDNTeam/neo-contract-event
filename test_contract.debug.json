@@ -1,7 +1,7 @@
 {
     "avm": {
         "name": "test_contract",
-        "hash": "e601e8955cf7f7cb09c151257752013f"
+        "hash": "015277b19d57732afa970b7e19b615a1"
     },
     "compiler": {
         "name": "neo-boa",
@@ -128,7 +128,7 @@
         },
         {
             "start": 224,
-            "end": 229,
+            "end": 230,
             "file": 1,
             "line": 5
         }

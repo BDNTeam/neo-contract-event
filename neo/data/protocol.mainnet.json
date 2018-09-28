@@ -41,6 +41,7 @@
     "RPCPort": 10332,
     "NodePort": 10333,
     "WsPort": 10334,
+    "SdkWsPort": 10338,
     "UriPrefix": [
       "http://*:10332"
     ],

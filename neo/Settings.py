@@ -87,6 +87,7 @@ class SettingsHolder:
     RPC_PORT = None
     NODE_PORT = None
     WS_PORT = None
+    SDK_WS_PORT = None
     URI_PREFIX = None
     BOOTSTRAP_FILE = None
     NOTIF_BOOTSTRAP_FILE = None
@@ -182,6 +183,7 @@ class SettingsHolder:
         self.RPC_PORT = int(config['RPCPort'])
         self.NODE_PORT = int(config['NodePort'])
         self.WS_PORT = config['WsPort']
+        self.SDK_WS_PORT = config['SdkWsPort']
         self.URI_PREFIX = config['UriPrefix']
         self.ACCEPT_INCOMING_PEERS = config['AcceptIncomingPeers']
 

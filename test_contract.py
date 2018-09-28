@@ -26,4 +26,4 @@ def Sell(from_addr, asset, price):
     # 和 solidity 不一样，neo 事件只支持单参数，所以多参数采用数组包裹
     Notify([from_addr, asset, price])
     # 测试 neo 的大小端序
-    return 0x1234
+    return 0x123456

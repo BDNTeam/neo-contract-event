@@ -8,6 +8,7 @@ and several more. See the documentation here:
 http://neo-python.readthedocs.io/en/latest/smartcontracts.html
 """
 import threading
+from concurrent.futures.thread import ThreadPoolExecutor
 from time import sleep
 
 from logzero import logger
@@ -20,12 +21,16 @@ from neo.Core.Blockchain import Blockchain
 from neo.Implementations.Blockchains.LevelDB.LevelDBBlockchain import LevelDBBlockchain
 from neo.Settings import settings
 
+import asyncio
+import websockets
+import json
+
 # If you want the log messages to also be saved in a logfile, enable the
 # next line. This configures a logfile with max 10 MB and 3 rotations:
 # settings.set_logfile("/tmp/logfile.log", max_bytes=1e7, backup_count=3)
 
 # Setup the smart contract instance
-smart_contract = SmartContract("9d13403b4ac851ccf5b7179da910c7076b48fc28")
+smart_contract = SmartContract("cfdff42a0fa99aeee31e2af5e140e0f9040b5d46")
 
 
 # Register an event handler for Runtime.Notify events of the smart contract.
@@ -36,7 +41,7 @@ def sc_notify(event):
     # Make sure that the event payload list has at least one element.
     if not isinstance(event.event_payload,
                       ContractParameter) or event.event_payload.Type != ContractParameterType.Array or not len(
-            event.event_payload.Value):
+        event.event_payload.Value):
         return
 
     # The event payload list has at least one element. As developer of the smart contract
@@ -47,10 +52,13 @@ def sc_notify(event):
     logger.info("- payload part 3: %d",
                 int.from_bytes(event.event_payload.Value[2].Value, byteorder='little', signed=True))
 
-    # 这个时候，可以将上面得到的信息组织好，通过 websocket 推送给客户端(SDK user)
+    # pack msg and push to SDK user
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        ret = json.dumps({'from': 'fromm'})
+        executor.submit(notify_event_task, ret)
 
 
-def custom_background_code():
+def log_block_height():
     """ Custom code run in a background thread. Prints the current block height.
 
     This function is run in a daemonized thread, which means it can be instantly killed at any
@@ -60,6 +68,47 @@ def custom_background_code():
     while True:
         logger.info("Block %s / %s", str(Blockchain.Default().Height), str(Blockchain.Default().HeaderHeight))
         sleep(15)
+
+
+async def notify_event(msg):
+    if ws_conn_poll:
+        await asyncio.wait([conn.send(msg) for conn in ws_conn_poll])
+
+
+def notify_event_task(msg):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    asyncio.get_event_loop().run_until_complete(notify_event(msg))
+
+
+ws_conn_poll = set()
+
+
+async def register(conn):
+    ws_conn_poll.add(conn)
+
+
+async def unregister(conn):
+    ws_conn_poll.remove(conn)
+
+
+async def handle_conn(conn, path):
+    await register(conn)
+    try:
+        async for message in conn:
+            print(message)
+
+    finally:
+        await unregister(conn)
+
+
+def start_ws():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    ws = websockets.serve(handle_conn, 'localhost', settings.SDK_WS_PORT)
+    asyncio.get_event_loop().run_until_complete(ws)
+    logger.info(f"SDK Websocket Server running at: {settings.SDK_WS_PORT}")
+    asyncio.get_event_loop().run_forever()
 
 
 def main():
@@ -76,9 +125,14 @@ def main():
     # Disable smart contract events for external smart contracts
     settings.set_log_smart_contract_events(False)
 
-    # Start a thread with custom code
-    d = threading.Thread(target=custom_background_code)
+    # Start a thread for logging block height
+    d = threading.Thread(target=log_block_height)
     d.setDaemon(True)  # daemonizing the thread will kill it when the main thread is quit
+    d.start()
+
+    # Start a thread for websocket server
+    d = threading.Thread(target=start_ws)
+    d.setDaemon(True)
     d.start()
 
     # Run all the things (blocking call)
